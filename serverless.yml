@@ -41,4 +41,4 @@ functions:
     vpc: ${self:custom.vpc}
 
 package:
-  artifact: /build/target/aqts-capture-ts-corrected.jar
+  artifact: /build/target/aqts-capture-ts-corrected-aws.jar
