@@ -5,9 +5,12 @@ import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class PreProcess implements Function<RequestObject, ResultObject> {
+	private static final Logger LOG = LoggerFactory.getLogger(PreProcess.class);
 
 	private JsonDataDao jsonDataDao;
 
@@ -18,6 +21,7 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 
 	@Override
 	public ResultObject apply(RequestObject requestObject) {
+		LOG.debug("json_data_id: %}", requestObject.getId());
 		ResultObject resultObject = new ResultObject();
 		try {
 			resultObject.setUniqueId(jsonDataDao.getUniqueId(requestObject.getId()));
