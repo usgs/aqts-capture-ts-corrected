@@ -13,7 +13,7 @@ select time_series_unique_id,
        response_time,
        response_version
   from (select jsonb_extract_path_text(json_content, 'UniqueId') time_series_unique_id,
-               jsonb_array_elements(jsonb_extract_path(json_content, 'Grades')) grades
+               jsonb_array_elements(jsonb_extract_path(json_content, 'Grades')) grades,
                jsonb_extract_path_text(json_content, 'ResponseTime')::timestamp response_time,
                jsonb_extract_path_text(json_content, 'ResponseVersion')::numeric response_version
           from json_data
