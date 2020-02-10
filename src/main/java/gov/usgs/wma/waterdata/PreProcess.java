@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +21,13 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 	}
 
 	@Override
+	@Transactional
 	public ResultObject apply(RequestObject requestObject) {
-		LOG.debug("json_data_id: " + requestObject.getId());
+		LOG.debug("json_data_id: {}", requestObject.getId());
 		ResultObject resultObject = new ResultObject();
 		try {
 			resultObject.setUniqueId(jsonDataDao.getUniqueId(requestObject.getId()));
+			LOG.debug("guid: {}", resultObject.getUniqueId());
 			jsonDataDao.doApprovals(requestObject.getId());
 			jsonDataDao.doGapTolerances(requestObject.getId());
 			jsonDataDao.doGrades(requestObject.getId());
