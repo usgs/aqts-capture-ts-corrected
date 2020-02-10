@@ -35,7 +35,7 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 			jsonDataDao.doMethods(requestObject.getId());
 			jsonDataDao.doPoints(requestObject.getId());
 		} catch (IOException e) {
-			
+			LOG.error(e.getLocalizedMessage());
 		}
 		return resultObject;
 	}
