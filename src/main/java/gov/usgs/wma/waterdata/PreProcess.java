@@ -21,7 +21,7 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 
 	@Override
 	public ResultObject apply(RequestObject requestObject) {
-		LOG.debug("json_data_id: %}", requestObject.getId());
+		LOG.debug("json_data_id: " + requestObject.getId());
 		ResultObject resultObject = new ResultObject();
 		try {
 			resultObject.setUniqueId(jsonDataDao.getUniqueId(requestObject.getId()));
