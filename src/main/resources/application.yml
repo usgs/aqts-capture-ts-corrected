@@ -5,6 +5,7 @@ spring:
     password: ${AQTS_SCHEMA_OWNER_PASSWORD}
     hikari:
       maximumPoolSize: 3
+      auto-commit: false
 
 logging:
   level:
