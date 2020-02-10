@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 
 @Component
@@ -37,7 +36,6 @@ public class JsonDataDao {
 	@Value("classpath:sql/uniqueId.sql")
 	private Resource uniqueId;
 
-	@Transactional(readOnly=true)
 	public String getUniqueId(Long jsonDataId) throws IOException {
 		String sql = new String(FileCopyUtils.copyToByteArray(uniqueId.getInputStream()));
 		return jdbcTemplate.queryForObject(sql,
@@ -46,37 +44,30 @@ public class JsonDataDao {
 			);
 	}
 
-	@Transactional
 	public void doApprovals(Long jsonDataId) throws IOException {
 		doUpdate(jsonDataId, approvals);
 	}
 
-	@Transactional
 	public void doGapTolerances(Long jsonDataId) throws IOException {
 		doUpdate(jsonDataId, gapTolerances);
 	}
 
-	@Transactional
 	public void doGrades(Long jsonDataId) throws IOException {
 		doUpdate(jsonDataId, grades);
 	}
 
-	@Transactional
 	public void doInterpolationTypes(Long jsonDataId) throws IOException {
 		doUpdate(jsonDataId, interpolationTypes);
 	}
 
-	@Transactional
 	public void doMethods(Long jsonDataId) throws IOException {
 		doUpdate(jsonDataId, methods);
 	}
 
-	@Transactional
 	public void doPoints(Long jsonDataId) throws IOException {
 		doUpdate(jsonDataId, points);
 	}
 
-	@Transactional
 	protected void doUpdate(Long jsonDataId, Resource resource) throws IOException {
 		String sql = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
 		jdbcTemplate.update(sql, jsonDataId);
