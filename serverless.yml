@@ -6,7 +6,7 @@ provider:
   stage: ${opt:stage, 'TEST'}
   runtime: java8
   memorySize: 512
-  timeout: 60
+  timeout: 120
   logRetentionInDays: 30
   deploymentBucket:
     name: iow-cloud-applications
@@ -38,7 +38,7 @@ functions:
       AQTS_DATABASE_NAME: ${self:custom.db.connectInfo.DATABASE_NAME}
       AQTS_SCHEMA_OWNER_PASSWORD: ${self:custom.db.connectInfo.SCHEMA_OWNER_PASSWORD}
       AWS_DEPLOYMENT_REGION: ${self:provider.region}
-      ROOT_LOG_LEVEL: DEBUG
+      ROOT_LOG_LEVEL: INFO
     vpc: ${self:custom.vpc}
 
 package:
