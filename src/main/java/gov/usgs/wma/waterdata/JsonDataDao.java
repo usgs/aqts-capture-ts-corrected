@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 
-i@Component
+@Component
 public class JsonDataDao {
 	private static final Logger LOG = LoggerFactory.getLogger(JsonDataDao.class);
 
