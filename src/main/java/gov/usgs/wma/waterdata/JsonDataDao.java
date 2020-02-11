@@ -2,6 +2,8 @@ package gov.usgs.wma.waterdata;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -10,8 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 
-@Component
+i@Component
 public class JsonDataDao {
+	private static final Logger LOG = LoggerFactory.getLogger(JsonDataDao.class);
 
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
@@ -38,11 +41,11 @@ public class JsonDataDao {
 	private Resource uniqueId;
 
 	@Transactional(readOnly=true)
-	public String getUniqueId(Long jsonDataId) throws IOException {
+	public TimeSeriesData getUniqueId(Long jsonDataId) throws IOException {
 		String sql = new String(FileCopyUtils.copyToByteArray(uniqueId.getInputStream()));
 		return jdbcTemplate.queryForObject(sql,
 				new Object[] {jsonDataId},
-				String.class
+				TimeSeriesData.class
 			);
 	}
 
@@ -79,6 +82,11 @@ public class JsonDataDao {
 	@Transactional
 	protected void doUpdate(Long jsonDataId, Resource resource) throws IOException {
 		String sql = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
-		jdbcTemplate.update(sql, jsonDataId);
+		try {
+			jdbcTemplate.update(sql, jsonDataId);
+		} catch (Exception e) {
+			LOG.error("in doUpdate", e);
+			throw e;
+		}
 	}
 }

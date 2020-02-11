@@ -4,7 +4,8 @@ spring:
     username: ${AQTS_SCHEMA_OWNER_USERNAME}
     password: ${AQTS_SCHEMA_OWNER_PASSWORD}
     hikari:
-      maximum-pool-size: 2
+      maximum-pool-size: 1
+      connection-test-query: select now()
       auto-commit: false
 
 logging:
