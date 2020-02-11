@@ -4,13 +4,12 @@ spring:
     username: ${AQTS_SCHEMA_OWNER_USERNAME}
     password: ${AQTS_SCHEMA_OWNER_PASSWORD}
     hikari:
-      maximumPoolSize: 15
+      maximum-pool-size: 2
       auto-commit: false
 
 logging:
   pattern:
     console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.30t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-    file: "%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
   level:
     root: ${ROOT_LOG_LEVEL}
     com.zaxxer: OFF
