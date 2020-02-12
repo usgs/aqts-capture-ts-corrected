@@ -41,11 +41,11 @@ public class JsonDataDao {
 	private Resource uniqueId;
 
 	@Transactional(readOnly=true)
-	public TimeSeriesData getUniqueId(Long jsonDataId) throws IOException {
+	public String getUniqueId(Long jsonDataId) throws IOException {
 		String sql = new String(FileCopyUtils.copyToByteArray(uniqueId.getInputStream()));
 		return jdbcTemplate.queryForObject(sql,
 				new Object[] {jsonDataId},
-				TimeSeriesData.class
+				String.class
 			);
 	}
 

@@ -23,33 +23,29 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 	@Override
 	@Transactional
 	public ResultObject apply(RequestObject requestObject) {
-		LOG.info("json_data_id: {}", requestObject.getId());
+		LOG.debug("json_data_id: {}", requestObject.getId());
 		ResultObject resultObject = new ResultObject();
 		try {
-			TimeSeriesData tsData = jsonDataDao.getUniqueId(requestObject.getId());
-			resultObject.setUniqueId(tsData.getUniqueId());
-			LOG.info("guid: {}", resultObject.getUniqueId());
-			LOG.info("contentSize: {}", tsData.getContentSize());
-//			if (339181 < tsData.getContentSize()) {
-				LOG.info("Before Approvals");
-				jsonDataDao.doApprovals(requestObject.getId());
-				LOG.info("After Approvals");
-				LOG.info("Before GapTolerances");
-				jsonDataDao.doGapTolerances(requestObject.getId());
-				LOG.info("After GapTolerances");
-				LOG.info("Before Grades");
-				jsonDataDao.doGrades(requestObject.getId());
-				LOG.info("After Grades");
-				LOG.info("Before InterpolationTypes");
-				jsonDataDao.doInterpolationTypes(requestObject.getId());
-				LOG.info("After InterpolationTypes");
-				LOG.info("Before Methods");
-				jsonDataDao.doMethods(requestObject.getId());
-				LOG.info("After Methods");
-				LOG.info("Before Points");
-				jsonDataDao.doPoints(requestObject.getId());
-				LOG.info("After Points");
-//			}
+			resultObject.setUniqueId(jsonDataDao.getUniqueId(requestObject.getId()));
+			LOG.debug("guid: {}", resultObject.getUniqueId());
+			LOG.debug("Before Approvals");
+			jsonDataDao.doApprovals(requestObject.getId());
+			LOG.debug("After Approvals");
+			LOG.debug("Before GapTolerances");
+			jsonDataDao.doGapTolerances(requestObject.getId());
+			LOG.debug("After GapTolerances");
+			LOG.debug("Before Grades");
+			jsonDataDao.doGrades(requestObject.getId());
+			LOG.debug("After Grades");
+			LOG.debug("Before InterpolationTypes");
+			jsonDataDao.doInterpolationTypes(requestObject.getId());
+			LOG.debug("After InterpolationTypes");
+			LOG.debug("Before Methods");
+			jsonDataDao.doMethods(requestObject.getId());
+			LOG.debug("After Methods");
+			LOG.debug("Before Points");
+			jsonDataDao.doPoints(requestObject.getId());
+			LOG.debug("After Points");
 		} catch (IOException e) {
 			LOG.error(e.getLocalizedMessage());
 		}
