@@ -10,9 +10,10 @@
     <properties>
 <!--         <java.version>11</java.version> -->
         <revision>0-DEFAULT</revision>
+        <wma.maven.url>https://cida.usgs.gov/artifactory</wma.maven.url>
         <aws-lambda-events.version>2.2.7</aws-lambda-events.version>
         <aws-lambda-java-core.version>1.2.0</aws-lambda-java-core.version>
-        <spring-cloud-function.version>3.0.1.RELEASE</spring-cloud-function.version>
+        <spring-cloud-function.version>3.0.2.RELEASE</spring-cloud-function.version>
         <spring-boot-thin.version>1.0.23.RELEASE</spring-boot-thin.version>
         <mybatis-spring-version>2.0.3</mybatis-spring-version>
         <mybatis-version>3.5.3</mybatis-version>
@@ -42,6 +43,32 @@
         <url>https://github.com/usgs/aqts-capture-ts-corrected</url>
         <tag>HEAD</tag>
     </scm>
+
+    <repositories>
+        <repository>
+            <id>Central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>WMA</id>
+            <name>WMA Artifactory</name>
+            <url>${wma.maven.url}/list/wma-maven-centralized/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>wma-maven-releases</id>
+            <name>wma-maven-releases</name>
+            <url>${wma.maven.url}/wma-maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>wma-maven-snapshots</id>
+            <name>wma-maven-snapshots</name>
+            <url>${wma.maven.url}/wma-maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -81,23 +108,30 @@
             <artifactId>postgis-jdbc</artifactId>
             <version>2.3.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20190722</version>
-        </dependency>
 
         <!-- TEST DEPENDENCIES-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
             <version>2.6.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.springtestdbunit</groupId>
@@ -107,15 +141,25 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <version>1.11.2</version>
+                        <configuration>
+                            <tag>${project.artifactId}-${project.version}</tag>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -133,39 +177,8 @@
                 <configuration>
                     <finalName>aqts-capture-ts-corrected-aws</finalName>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-scm-plugin</artifactId>
-                <version>1.11.2</version>
-                <configuration>
-                    <tag>${project.artifactId}-${project.version}</tag>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.1.0</version>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -192,7 +205,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.31.0</version>
+                <version>0.33.0</version>
                 <executions>
                     <execution>
                         <id>start</id>

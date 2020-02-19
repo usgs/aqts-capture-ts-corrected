@@ -28,6 +28,9 @@ public class JsonDataDao {
 	@Value("classpath:sql/grades.sql")
 	private Resource grades;
 
+	@Value("classpath:sql/headerInfo.sql")
+	private Resource headerInfo;
+
 	@Value("classpath:sql/interpolationTypes.sql")
 	private Resource interpolationTypes;
 
@@ -37,56 +40,58 @@ public class JsonDataDao {
 	@Value("classpath:sql/points.sql")
 	private Resource points;
 
-	@Value("classpath:sql/uniqueId.sql")
-	private Resource uniqueId;
+	@Transactional
+	public void doApprovals(Long jsonDataId) {
+		doUpdate(jsonDataId, approvals);
+	}
 
-	@Transactional(readOnly=true)
-	public String getUniqueId(Long jsonDataId) throws IOException {
-		String sql = new String(FileCopyUtils.copyToByteArray(uniqueId.getInputStream()));
-		return jdbcTemplate.queryForObject(sql,
+	@Transactional
+	public void doGapTolerances(Long jsonDataId) {
+		doUpdate(jsonDataId, gapTolerances);
+	}
+
+	@Transactional
+	public void doGrades(Long jsonDataId) {
+		doUpdate(jsonDataId, grades);
+	}
+
+	@Transactional
+	public String doHeaderInfo(Long jsonDataId) {
+		return jdbcTemplate.queryForObject(
+				getSql(headerInfo),
 				new Object[] {jsonDataId},
 				String.class
 			);
 	}
 
 	@Transactional
-	public void doApprovals(Long jsonDataId) throws IOException {
-		doUpdate(jsonDataId, approvals);
-	}
-
-	@Transactional
-	public void doGapTolerances(Long jsonDataId) throws IOException {
-		doUpdate(jsonDataId, gapTolerances);
-	}
-
-	@Transactional
-	public void doGrades(Long jsonDataId) throws IOException {
-		doUpdate(jsonDataId, grades);
-	}
-
-	@Transactional
-	public void doInterpolationTypes(Long jsonDataId) throws IOException {
+	public void doInterpolationTypes(Long jsonDataId) {
 		doUpdate(jsonDataId, interpolationTypes);
 	}
 
 	@Transactional
-	public void doMethods(Long jsonDataId) throws IOException {
+	public void doMethods(Long jsonDataId) {
 		doUpdate(jsonDataId, methods);
 	}
 
 	@Transactional
-	public void doPoints(Long jsonDataId) throws IOException {
+	public void doPoints(Long jsonDataId) {
 		doUpdate(jsonDataId, points);
 	}
 
 	@Transactional
-	protected void doUpdate(Long jsonDataId, Resource resource) throws IOException {
-		String sql = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
+	protected void doUpdate(Long jsonDataId, Resource resource) {
+		jdbcTemplate.update(getSql(resource), jsonDataId);
+	}
+
+	protected String getSql(Resource resource) {
+		String sql = null;
 		try {
-			jdbcTemplate.update(sql, jsonDataId);
-		} catch (Exception e) {
-			LOG.error("in doUpdate", e);
-			throw e;
+			sql = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
+		} catch (IOException e) {
+			LOG.error("Unable to get SQL statement", e);
+			throw new RuntimeException(e);
 		}
+		return sql;
 	}
 }

@@ -1,6 +1,5 @@
 package gov.usgs.wma.waterdata;
 
-import java.io.IOException;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -22,34 +21,24 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 
 	@Override
 	@Transactional
-	public ResultObject apply(RequestObject requestObject) {
-		LOG.debug("json_data_id: {}", requestObject.getId());
-		ResultObject resultObject = new ResultObject();
-		try {
-			resultObject.setUniqueId(jsonDataDao.getUniqueId(requestObject.getId()));
-			LOG.debug("guid: {}", resultObject.getUniqueId());
-			LOG.debug("Before Approvals");
-			jsonDataDao.doApprovals(requestObject.getId());
-			LOG.debug("After Approvals");
-			LOG.debug("Before GapTolerances");
-			jsonDataDao.doGapTolerances(requestObject.getId());
-			LOG.debug("After GapTolerances");
-			LOG.debug("Before Grades");
-			jsonDataDao.doGrades(requestObject.getId());
-			LOG.debug("After Grades");
-			LOG.debug("Before InterpolationTypes");
-			jsonDataDao.doInterpolationTypes(requestObject.getId());
-			LOG.debug("After InterpolationTypes");
-			LOG.debug("Before Methods");
-			jsonDataDao.doMethods(requestObject.getId());
-			LOG.debug("After Methods");
-			LOG.debug("Before Points");
-			jsonDataDao.doPoints(requestObject.getId());
-			LOG.debug("After Points");
-		} catch (IOException e) {
-			LOG.error(e.getLocalizedMessage());
-		}
-		return resultObject;
+	public ResultObject apply(RequestObject request) {
+		return processRequest(request);
+	}
+
+	protected ResultObject processRequest(RequestObject request) {
+		LOG.debug("json_data_id: {}", request.getId());
+		ResultObject result = new ResultObject();
+		result.setJsonDataId(request.getId());
+
+		jsonDataDao.doApprovals(request.getId());
+		jsonDataDao.doGapTolerances(request.getId());
+		jsonDataDao.doGrades(request.getId());
+		result.setUniqueId(jsonDataDao.doHeaderInfo(request.getId()));
+		jsonDataDao.doInterpolationTypes(request.getId());
+		jsonDataDao.doMethods(request.getId());
+		jsonDataDao.doPoints(request.getId());
+
+		return result;
 	}
 
 }

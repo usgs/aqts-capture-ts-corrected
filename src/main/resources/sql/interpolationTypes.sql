@@ -1,20 +1,14 @@
 insert
-  into time_series_interpolation_types (time_series_unique_id,
+  into time_series_interpolation_types (json_data_id,
                                         start_time,
                                         end_time,
-                                        interpolation_type,
-                                        response_time,
-                                        response_version
+                                        interpolation_type
                                        )
-select time_series_unique_id,
-       jsonb_extract_path_text(interpolation_types, 'StartTime')::timestamp start_time,
-       jsonb_extract_path_text(interpolation_types, 'EndTime')::timestamp end_time,
-       jsonb_extract_path_text(interpolation_types, 'Type') interpolation_type,
-       response_time,
-       response_version
-  from (select jsonb_extract_path_text(json_content, 'UniqueId') time_series_unique_id,
-               jsonb_array_elements(jsonb_extract_path(json_content, 'InterpolationTypes')) interpolation_types,
-               jsonb_extract_path_text(json_content, 'ResponseTime')::timestamp response_time,
-               jsonb_extract_path_text(json_content, 'ResponseVersion')::numeric response_version
+select json_data_id,
+       adjust_timestamp(jsonb_extract_path_text(interpolation_types, 'StartTime')) start_time,
+       adjust_timestamp(jsonb_extract_path_text(interpolation_types, 'EndTime')) end_time,
+       jsonb_extract_path_text(interpolation_types, 'Type') interpolation_type
+  from (select json_data_id,
+               jsonb_array_elements(jsonb_extract_path(json_content, 'InterpolationTypes')) interpolation_types
           from json_data
          where json_data_id = ?) a

@@ -5,8 +5,8 @@ provider:
   region: ${opt:region, 'us-west-2'}
   stage: ${opt:stage, 'TEST'}
   runtime: java8
-  memorySize: 512
-  timeout: 120
+  memorySize: 256
+  timeout: 60
   logRetentionInDays: 30
   deploymentBucket:
     name: iow-cloud-applications
@@ -14,7 +14,7 @@ provider:
     "wma:applicationId": "AQTS Capture Time Series Corrected Data"
     "wma:contact": "Jim Kreft jkreft@usgs.gov"
     "wma:environment": ${self:provider.stage}
-    "wma:taggingVersion": 0.0.1
+    "wma:taggingVersion": ${opt:taggingVersion}
     "wma:costCenter": TBD
 
 custom:
@@ -42,4 +42,4 @@ functions:
     vpc: ${self:custom.vpc}
 
 package:
-  artifact: /build/target/aqts-capture-ts-corrected-aws.jar
+  artifact: aqts-capture-ts-corrected-aws.jar

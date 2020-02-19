@@ -1,10 +1,9 @@
 # Aquarius Timeseries (AQTS) Pre-Process Timeseries Data
 
-[![Build Status](https://travis-ci.com/usgs/aqts-capture-ts-corrected.svg?branch=master)](https://travis-ci.com/usgs/aqts-ts-type-router)
+[![Build Status](https://travis-ci.com/usgs/aqts-capture-ts-corrected.svg?branch=master)](https://travis-ci.com/usgs/aqts-capture-ts-corrected)
+[![codecov](https://codecov.io/gh/usgs/capture-ts-corrected/branch/master/graph/badge.svg)](https://codecov.io/gh/usgs/aqts-capture-ts-corrected)
 
 Split timeseries JSON data into pieces for later processing.
-
-blah, blah, blah
 
 ## Testing
 This project contains JUnit tests. Maven can be used to run them (in addition to the capabilities of your IDE).
@@ -27,7 +26,7 @@ mvn package
 To additionally start up a Docker database and run the integration tests of the application use:
 
 ```.sh
-mvn verify -DTESTING_DATABASE_PORT=5437 -DTESTING_DATABASE_ADDRESS=localhost -DTESTING_DATABASE_NETWORK=wdfn
+mvn verify -DTESTING_DATABASE_PORT=5437 -DTESTING_DATABASE_ADDRESS=localhost -DTESTING_DATABASE_NETWORK=wdfn -DROOT_LOG_LEVEL=INFO
 ```
 
 ### LocalStack
