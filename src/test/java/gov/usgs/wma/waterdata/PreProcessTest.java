@@ -1,8 +1,10 @@
 package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,23 +32,26 @@ public class PreProcessTest {
 	@Test
 	public void notFoundTest() {
 		ResultObject result = preProcess.apply(request);
-		assertNull(result.getUniqueId());
-		assertEquals(JsonDataDaoIT.JSON_DATA_ID, result.getJsonDataId());
-		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID);
+		assertNotNull(result);
+		assertTrue(result.getTimesSeriesList().isEmpty());
+		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID);
+		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID);
+		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID);
 		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doMethods(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doPoints(JsonDataDaoIT.JSON_DATA_ID);
+		verify(jsonDataDao, never()).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID);
+		verify(jsonDataDao, never()).doMethods(JsonDataDaoIT.JSON_DATA_ID);
+		verify(jsonDataDao, never()).doPoints(JsonDataDaoIT.JSON_DATA_ID);
 	}
 
 	@Test
 	public void foundTest() {
-		when(jsonDataDao.doHeaderInfo(anyLong())).thenReturn(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID);
+		TimeSeries timeSeries = new TimeSeries();
+		timeSeries.setUniqueId(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID);
+		when(jsonDataDao.doHeaderInfo(anyLong())).thenReturn(timeSeries);
 		ResultObject result = preProcess.processRequest(request);
-		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getUniqueId());
-		assertEquals(JsonDataDaoIT.JSON_DATA_ID, result.getJsonDataId());
+		assertNotNull(result);
+		assertEquals(1, result.getTimesSeriesList().size());
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimesSeriesList().get(0).getUniqueId());
 		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID);
 		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID);
 		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID);

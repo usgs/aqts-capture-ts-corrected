@@ -51,7 +51,7 @@ public class JsonDataDaoIT {
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesApprovals/",
+			value="classpath:/testResult/happyPath/timeSeriesApprovals/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test
@@ -61,7 +61,7 @@ public class JsonDataDaoIT {
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesGapTolerances/",
+			value="classpath:/testResult/happyPath/timeSeriesGapTolerances/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test
@@ -71,7 +71,7 @@ public class JsonDataDaoIT {
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesGrades/",
+			value="classpath:/testResult/happyPath/timeSeriesGrades/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test
@@ -81,19 +81,19 @@ public class JsonDataDaoIT {
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesHeaderInfo/",
+			value="classpath:/testResult/happyPath/timeSeriesHeaderInfo/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test
 	public void doHeaderInfoTest() {
-		String timeSeriesUniqueId = jsonDataDao.doHeaderInfo(JSON_DATA_ID);
-		assertNotNull(timeSeriesUniqueId);
-		assertEquals(TIME_SERIES_UNIQUE_ID, timeSeriesUniqueId);
+		TimeSeries timeSeries = jsonDataDao.doHeaderInfo(JSON_DATA_ID);
+		assertNotNull(timeSeries);
+		assertEquals(TIME_SERIES_UNIQUE_ID, timeSeries.getUniqueId());
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesInterpolationTypes/",
+			value="classpath:/testResult/happyPath/timeSeriesInterpolationTypes/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test
@@ -103,7 +103,7 @@ public class JsonDataDaoIT {
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesMethods/",
+			value="classpath:/testResult/happyPath/timeSeriesMethods/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test
@@ -113,7 +113,7 @@ public class JsonDataDaoIT {
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesPoints/",
+			value="classpath:/testResult/happyPath/timeSeriesPoints/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test

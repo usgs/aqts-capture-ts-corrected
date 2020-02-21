@@ -12,3 +12,4 @@ select json_data_id,
                jsonb_array_elements(jsonb_extract_path(json_content, 'Methods')) methods
           from json_data
          where json_data_id = ?) a
+on conflict on constraint time_series_methods_ak do nothing

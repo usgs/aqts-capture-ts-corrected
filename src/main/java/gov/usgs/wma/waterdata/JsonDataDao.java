@@ -56,11 +56,11 @@ public class JsonDataDao {
 	}
 
 	@Transactional
-	public String doHeaderInfo(Long jsonDataId) {
+	public TimeSeries doHeaderInfo(Long jsonDataId) {
 		return jdbcTemplate.queryForObject(
 				getSql(headerInfo),
 				new Object[] {jsonDataId},
-				String.class
+				new TimeSeriesRowMapper()
 			);
 	}
 
