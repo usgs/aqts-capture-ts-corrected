@@ -32,7 +32,7 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 
 		TimeSeries timeSeries = jsonDataDao.doHeaderInfo(request.getId());
 		if (null != timeSeries) {
-			result.setTimesSeriesList(Arrays.asList(timeSeries));
+			result.setTimeSeriesList(Arrays.asList(timeSeries));
 			jsonDataDao.doApprovals(request.getId());
 			jsonDataDao.doGapTolerances(request.getId());
 			jsonDataDao.doGrades(request.getId());

@@ -33,7 +33,7 @@ public class PreProcessTest {
 	public void notFoundTest() {
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
-		assertTrue(result.getTimesSeriesList().isEmpty());
+		assertTrue(result.getTimeSeriesList().isEmpty());
 		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID);
 		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID);
 		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID);
@@ -50,8 +50,8 @@ public class PreProcessTest {
 		when(jsonDataDao.doHeaderInfo(anyLong())).thenReturn(timeSeries);
 		ResultObject result = preProcess.processRequest(request);
 		assertNotNull(result);
-		assertEquals(1, result.getTimesSeriesList().size());
-		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimesSeriesList().get(0).getUniqueId());
+		assertEquals(1, result.getTimeSeriesList().size());
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeriesList().get(0).getUniqueId());
 		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID);
 		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID);
 		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID);

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultObject {
-	private List<TimeSeries> timesSeriesList;
-	public List<TimeSeries> getTimesSeriesList() {
-		return null != timesSeriesList ? timesSeriesList : new ArrayList<TimeSeries>();
+	private List<TimeSeries> timeSeriesList;
+	public List<TimeSeries> getTimeSeriesList() {
+		return null != timeSeriesList ? timeSeriesList : new ArrayList<TimeSeries>();
 	}
-	public void setTimesSeriesList(List<TimeSeries> timesSeriesList) {
-		this.timesSeriesList = timesSeriesList;
+	public void setTimeSeriesList(List<TimeSeries> timeSeriesList) {
+		this.timeSeriesList = timeSeriesList;
 	}
 }
