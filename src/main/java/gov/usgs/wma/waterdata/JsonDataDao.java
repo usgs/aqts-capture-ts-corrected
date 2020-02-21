@@ -59,8 +59,8 @@ public class JsonDataDao {
 	public TimeSeries doHeaderInfo(Long jsonDataId) {
 		return jdbcTemplate.queryForObject(
 				getSql(headerInfo),
-				new Object[] {jsonDataId},
-				new TimeSeriesRowMapper()
+				new TimeSeriesRowMapper(),
+				jsonDataId
 			);
 	}
 
