@@ -1,5 +1,6 @@
 package gov.usgs.wma.waterdata;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -28,15 +29,17 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 	protected ResultObject processRequest(RequestObject request) {
 		LOG.debug("json_data_id: {}", request.getId());
 		ResultObject result = new ResultObject();
-		result.setJsonDataId(request.getId());
 
-		jsonDataDao.doApprovals(request.getId());
-		jsonDataDao.doGapTolerances(request.getId());
-		jsonDataDao.doGrades(request.getId());
-		result.setUniqueId(jsonDataDao.doHeaderInfo(request.getId()));
-		jsonDataDao.doInterpolationTypes(request.getId());
-		jsonDataDao.doMethods(request.getId());
-		jsonDataDao.doPoints(request.getId());
+		TimeSeries timeSeries = jsonDataDao.doHeaderInfo(request.getId());
+		if (null != timeSeries) {
+			result.setTimeSeriesList(Arrays.asList(timeSeries));
+			jsonDataDao.doApprovals(request.getId());
+			jsonDataDao.doGapTolerances(request.getId());
+			jsonDataDao.doGrades(request.getId());
+			jsonDataDao.doInterpolationTypes(request.getId());
+			jsonDataDao.doMethods(request.getId());
+			jsonDataDao.doPoints(request.getId());
+		}
 
 		return result;
 	}

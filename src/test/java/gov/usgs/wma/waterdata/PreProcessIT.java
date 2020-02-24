@@ -1,6 +1,7 @@
 package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -47,31 +48,31 @@ public class PreProcessIT {
 	@DatabaseSetup("classpath:/testData/jsonData/")
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesApprovals/",
+			value="classpath:/testResult/happyPath/timeSeriesApprovals/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesGapTolerances/",
+			value="classpath:/testResult/happyPath/timeSeriesGapTolerances/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesGrades/",
+			value="classpath:/testResult/happyPath/timeSeriesGrades/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesHeaderInfo/",
+			value="classpath:/testResult/happyPath/timeSeriesHeaderInfo/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesInterpolationTypes/",
+			value="classpath:/testResult/happyPath/timeSeriesInterpolationTypes/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesMethods/",
+			value="classpath:/testResult/happyPath/timeSeriesMethods/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@ExpectedDatabase(
-			value="classpath:/testResult/timeSeriesPoints/",
+			value="classpath:/testResult/happyPath/timeSeriesPoints/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
 	@Test
@@ -79,8 +80,9 @@ public class PreProcessIT {
 		RequestObject request = new RequestObject();
 		request.setId(JsonDataDaoIT.JSON_DATA_ID);
 		ResultObject result = preProcess.apply(request);
-		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getUniqueId());
-		assertEquals(JsonDataDaoIT.JSON_DATA_ID, result.getJsonDataId());
+		assertNotNull(result);
+		assertEquals(1, result.getTimeSeriesList().size());
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeriesList().get(0).getUniqueId());
 		try {
 			preProcess.apply(request);
 			fail("This function is not set up to process the same file more than once and should fail if it is.");

@@ -1,18 +1,14 @@
 package gov.usgs.wma.waterdata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResultObject {
-	private String uniqueId;
-	private Long jsonDataId;
-	public String getUniqueId() {
-		return uniqueId;
+	private List<TimeSeries> timeSeriesList;
+	public List<TimeSeries> getTimeSeriesList() {
+		return null != timeSeriesList ? timeSeriesList : new ArrayList<TimeSeries>();
 	}
-	public void setUniqueId(String uniqueId) {
-		this.uniqueId = uniqueId;
-	}
-	public Long getJsonDataId() {
-		return jsonDataId;
-	}
-	public void setJsonDataId(Long jsonDataId) {
-		this.jsonDataId = jsonDataId;
+	public void setTimeSeriesList(List<TimeSeries> timeSeriesList) {
+		this.timeSeriesList = timeSeriesList;
 	}
 }
