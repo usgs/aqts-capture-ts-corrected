@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ResultObject {
-	@JsonProperty("timeSeries")
+	@JsonProperty(value="timeSeries")
 	private List<TimeSeries> timeSeriesList;
 	public List<TimeSeries> getTimeSeriesList() {
 		return null != timeSeriesList ? timeSeriesList : new ArrayList<TimeSeries>();
