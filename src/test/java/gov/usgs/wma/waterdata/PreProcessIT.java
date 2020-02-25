@@ -81,8 +81,8 @@ public class PreProcessIT {
 		request.setId(JsonDataDaoIT.JSON_DATA_ID);
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
-		assertEquals(1, result.getTimeSeriesList().size());
-		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeriesList().get(0).getUniqueId());
+		assertEquals(1, result.getTimeSeries().size());
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeries().get(0).getUniqueId());
 		try {
 			preProcess.apply(request);
 			fail("This function is not set up to process the same file more than once and should fail if it is.");

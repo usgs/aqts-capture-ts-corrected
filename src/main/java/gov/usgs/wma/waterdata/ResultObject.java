@@ -3,15 +3,12 @@ package gov.usgs.wma.waterdata;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class ResultObject {
-	@JsonProperty(value="timeSeries")
-	private List<TimeSeries> timeSeriesList;
-	public List<TimeSeries> getTimeSeriesList() {
-		return null != timeSeriesList ? timeSeriesList : new ArrayList<TimeSeries>();
+	private List<TimeSeries> timeSeries;
+	public List<TimeSeries> getTimeSeries() {
+		return null != timeSeries ? timeSeries : new ArrayList<TimeSeries>();
 	}
-	public void setTimeSeriesList(List<TimeSeries> timeSeriesList) {
-		this.timeSeriesList = timeSeriesList;
+	public void setTimeSeries(List<TimeSeries> timeSeries) {
+		this.timeSeries = timeSeries;
 	}
 }
