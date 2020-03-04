@@ -5,3 +5,5 @@
 /.flattened-pom.xml
 /.project
 /application.yml
+.idea/
+aqts-capture-ts-corrected.iml
