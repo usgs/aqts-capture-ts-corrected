@@ -46,8 +46,6 @@ public class SkipDuplicatesTemporaryIT {
 	private JsonDataDao jsonDataDao;
 
 	public static final Long JSON_DATA_ID_2400 = 3l;
-	public static final String TIME_SERIES_UNIQUE_ID_TENTHS = "d9a9bcc1106a4819ad4e7a4f64894cec";
-	public static final String TIME_SERIES_UNIQUE_ID_2400 = "d9a9bcc1106a4819ad4e7a4f64894ced";
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
