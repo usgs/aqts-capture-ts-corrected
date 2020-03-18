@@ -1,0 +1,7 @@
+{
+  "name": "aqts-capture-ts-corrected",
+  "description": "Deployment via serverless",
+  "dependencies": {
+    "serverless": "^1.66.0"
+  }
+}
