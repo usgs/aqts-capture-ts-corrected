@@ -39,6 +39,7 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 			jsonDataDao.doInterpolationTypes(request.getId());
 			jsonDataDao.doMethods(request.getId());
 			jsonDataDao.doPoints(request.getId());
+			jsonDataDao.doQualifiers(request.getId());
 		}
 
 		return result;
