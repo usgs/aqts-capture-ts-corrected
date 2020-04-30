@@ -5,3 +5,4 @@ time_series_header_info
 time_series_interpolation_types
 time_series_methods
 time_series_points
+time_series_qualifiers

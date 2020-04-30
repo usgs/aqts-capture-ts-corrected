@@ -40,6 +40,9 @@ public class JsonDataDao {
 	@Value("classpath:sql/points.sql")
 	private Resource points;
 
+	@Value("classpath:sql/qualifiers.sql")
+	private Resource qualifiers;
+
 	@Transactional
 	public void doApprovals(Long jsonDataId) {
 		doUpdate(jsonDataId, approvals);
@@ -77,6 +80,11 @@ public class JsonDataDao {
 	@Transactional
 	public void doPoints(Long jsonDataId) {
 		doUpdate(jsonDataId, points);
+	}
+
+	@Transactional
+	public void doQualifiers(Long jsonDataId) {
+		doUpdate(jsonDataId, qualifiers);
 	}
 
 	@Transactional

@@ -121,6 +121,16 @@ public class JsonDataDaoIT {
 		jsonDataDao.doPoints(JSON_DATA_ID);
 	}
 
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@ExpectedDatabase(
+			value="classpath:/testResult/happyPath/timeSeriesQualifiers/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+			)
+	@Test
+	public void doQualifiersTest() {
+		jsonDataDao.doQualifiers(JSON_DATA_ID);
+	}
+
 	@Test
 	public void badResource() {
 		try {

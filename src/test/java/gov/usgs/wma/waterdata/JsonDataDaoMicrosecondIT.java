@@ -92,4 +92,13 @@ public class JsonDataDaoMicrosecondIT {
 		jsonDataDao.doMethods(JSON_DATA_ID_TENTHS);
 	}
 
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@ExpectedDatabase(
+			value="classpath:/testResult/processMicroseconds/timeSeriesQualifiers/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@Test
+	public void doQualifiersTest() {
+		jsonDataDao.doQualifiers(JSON_DATA_ID_TENTHS);
+	}
 }

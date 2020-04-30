@@ -75,6 +75,10 @@ public class PreProcessIT {
 			value="classpath:/testResult/happyPath/timeSeriesPoints/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
+	@ExpectedDatabase(
+			value="classpath:/testResult/happyPath/timeSeriesQualifiers/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+			)
 	@Test
 	public void fullTest() {
 		RequestObject request = new RequestObject();
