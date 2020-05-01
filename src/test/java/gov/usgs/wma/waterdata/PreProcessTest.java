@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,7 +27,7 @@ public class PreProcessTest {
 	public void beforeEach() {
 		preProcess = new PreProcess(jsonDataDao);
 		request = new RequestObject();
-		request.setId(JsonDataDaoIT.JSON_DATA_ID);
+		request.setId(JsonDataDaoIT.JSON_DATA_ID_1);
 	}
 
 	@Test
@@ -34,30 +35,32 @@ public class PreProcessTest {
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
 		assertTrue(result.getTimeSeriesList().isEmpty());
-		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao, never()).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao, never()).doMethods(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao, never()).doPoints(JsonDataDaoIT.JSON_DATA_ID);
+		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao, never()).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao, never()).doMethods(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao, never()).doPoints(JsonDataDaoIT.JSON_DATA_ID_1);
 	}
 
 	@Test
 	public void foundTest() {
 		TimeSeries timeSeries = new TimeSeries();
 		timeSeries.setUniqueId(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID);
-		when(jsonDataDao.doHeaderInfo(anyLong())).thenReturn(timeSeries);
+		timeSeries.setDataType("");
+		when(jsonDataDao.doHeaderInfo(anyLong())).thenReturn(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID);
+		when(jsonDataDao.getRouting(anyString())).thenReturn(timeSeries);
 		ResultObject result = preProcess.processRequest(request);
 		assertNotNull(result);
 		assertEquals(1, result.getTimeSeriesList().size());
 		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeriesList().get(0).getUniqueId());
-		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doMethods(JsonDataDaoIT.JSON_DATA_ID);
-		verify(jsonDataDao).doPoints(JsonDataDaoIT.JSON_DATA_ID);
+		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doMethods(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doPoints(JsonDataDaoIT.JSON_DATA_ID_1);
 	}
 }

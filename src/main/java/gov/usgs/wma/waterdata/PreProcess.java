@@ -30,8 +30,19 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 		LOG.debug("json_data_id: {}", request.getId());
 		ResultObject result = new ResultObject();
 
-		TimeSeries timeSeries = jsonDataDao.doHeaderInfo(request.getId());
-		if (null != timeSeries) {
+		String timeSeriesUniqueId = jsonDataDao.doHeaderInfo(request.getId());
+		if (null == timeSeriesUniqueId) {
+			// We can do nothing further if the data doesn't have a time series unique id
+			return result;
+		}
+
+		TimeSeries timeSeries = jsonDataDao.getRouting(timeSeriesUniqueId);
+		// getRouting throws a runtime error if the time series description is not available. 
+		//   That way the state machine will error and this data will get reprocessed after the 
+		//   description is available. (Any data updates will also be rolled back.)
+		// Otherwise check to see if the data is a type which we currently process.
+		if (null != timeSeries.getDataType()) {
+			//If it is, process the remaining data and pass on the pertinent information.
 			result.setTimeSeriesList(Arrays.asList(timeSeries));
 			jsonDataDao.doApprovals(request.getId());
 			jsonDataDao.doGapTolerances(request.getId());
@@ -44,5 +55,4 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 
 		return result;
 	}
-
 }

@@ -1,7 +1,6 @@
 package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 	classes={DBTestConfig.class, JsonDataDao.class})
-@DatabaseSetup("classpath:/testData/jsonData/")
+@DatabaseSetup("classpath:/testData/staticData/")
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 	DirtiesContextTestExecutionListener.class,
@@ -54,13 +53,12 @@ public class SkipDuplicatesTemporaryIT {
 			)
 	@Test
 	public void doHeaderInfoTest() {
-		TimeSeries timeSeries = jsonDataDao.doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID);
-		assertNotNull(timeSeries);
-		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, timeSeries.getUniqueId());
+		String timeSeriesUniqueId = jsonDataDao.doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1);
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, timeSeriesUniqueId);
 		try {
 			//This one should fail - we should only get a duplicate here if the file is loaded
 			//multiple times...
-			timeSeries = jsonDataDao.doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID);
+			timeSeriesUniqueId = jsonDataDao.doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1);
 			fail("Should have gotten duplicate");
 		} catch (DuplicateKeyException e) {
 			//This is what we want!

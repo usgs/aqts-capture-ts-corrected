@@ -45,7 +45,7 @@ public class PreProcessIT {
 	@Autowired
 	private PreProcess preProcess;
 
-	@DatabaseSetup("classpath:/testData/jsonData/")
+	@DatabaseSetup("classpath:/testData/staticData/")
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
 			value="classpath:/testResult/happyPath/timeSeriesApprovals/",
@@ -82,7 +82,7 @@ public class PreProcessIT {
 	@Test
 	public void fullTest() {
 		RequestObject request = new RequestObject();
-		request.setId(JsonDataDaoIT.JSON_DATA_ID);
+		request.setId(JsonDataDaoIT.JSON_DATA_ID_1);
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
 		assertEquals(1, result.getTimeSeriesList().size());

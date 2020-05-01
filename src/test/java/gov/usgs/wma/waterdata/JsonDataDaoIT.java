@@ -2,6 +2,8 @@ package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -30,7 +32,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 	classes={DBTestConfig.class, JsonDataDao.class})
-@DatabaseSetup("classpath:/testData/jsonData/")
+@DatabaseSetup("classpath:/testData/staticData/")
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 	DirtiesContextTestExecutionListener.class,
@@ -46,8 +48,14 @@ public class JsonDataDaoIT {
 	@Autowired
 	private JsonDataDao jsonDataDao;
 
-	public static final Long JSON_DATA_ID = 1l;
+	public static final Long JSON_DATA_ID_1 = 1l;
+	public static final Long JSON_DATA_ID_2 = 2l;
+	public static final Long JSON_DATA_ID_3 = 3l;
+	public static final Long JSON_DATA_ID_4 = 4l;
 	public static final String TIME_SERIES_UNIQUE_ID = "d9a9bcc1106a4819ad4e7a4f64894ceb";
+	public static final String TIME_SERIES_UNIQUE_ID_TO_SKIP = "skipme";
+	public static final String TIME_SERIES_UNIQUE_ID_NOT_FOUND = "notfound";
+	public static final String PROCESS_DATA_TYPE = "tsDailyValueStatisticalTransform";
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
@@ -56,7 +64,7 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doApprovalsTest() {
-		jsonDataDao.doApprovals(JSON_DATA_ID);
+		jsonDataDao.doApprovals(JSON_DATA_ID_1);
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -66,7 +74,7 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doGapTolerancesTest() {
-		jsonDataDao.doGapTolerances(JSON_DATA_ID);
+		jsonDataDao.doGapTolerances(JSON_DATA_ID_1);
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -76,7 +84,7 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doGradesTest() {
-		jsonDataDao.doGrades(JSON_DATA_ID);
+		jsonDataDao.doGrades(JSON_DATA_ID_1);
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -86,9 +94,14 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doHeaderInfoTest() {
-		TimeSeries timeSeries = jsonDataDao.doHeaderInfo(JSON_DATA_ID);
-		assertNotNull(timeSeries);
-		assertEquals(TIME_SERIES_UNIQUE_ID, timeSeries.getUniqueId());
+		String timeSeriesUniqueId = jsonDataDao.doHeaderInfo(JSON_DATA_ID_1);
+		assertEquals(TIME_SERIES_UNIQUE_ID, timeSeriesUniqueId);
+	}
+
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@Test
+	public void doHeaderInfoNoIdTest() {
+		assertNull(jsonDataDao.doHeaderInfo(JSON_DATA_ID_4));
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -98,7 +111,7 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doInterpolationTypesTest() {
-		jsonDataDao.doInterpolationTypes(JSON_DATA_ID);
+		jsonDataDao.doInterpolationTypes(JSON_DATA_ID_1);
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -108,7 +121,7 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doMethodsTest() {
-		jsonDataDao.doMethods(JSON_DATA_ID);
+		jsonDataDao.doMethods(JSON_DATA_ID_1);
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -118,7 +131,7 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doPointsTest() {
-		jsonDataDao.doPoints(JSON_DATA_ID);
+		jsonDataDao.doPoints(JSON_DATA_ID_1);
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -128,7 +141,33 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doQualifiersTest() {
-		jsonDataDao.doQualifiers(JSON_DATA_ID);
+		jsonDataDao.doQualifiers(JSON_DATA_ID_1);
+	}
+
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@Test
+	public void getRoutingToProcessTest() {
+		TimeSeries timeSeries = jsonDataDao.getRouting(TIME_SERIES_UNIQUE_ID);
+		assertNotNull(timeSeries);
+		assertEquals(TIME_SERIES_UNIQUE_ID, timeSeries.getUniqueId());
+		assertEquals(PROCESS_DATA_TYPE, timeSeries.getDataType());
+	}
+
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@Test
+	public void getRoutingToSkipTest() {
+		TimeSeries timeSeries = jsonDataDao.getRouting(TIME_SERIES_UNIQUE_ID_TO_SKIP);
+		assertNotNull(timeSeries);
+		assertEquals(TIME_SERIES_UNIQUE_ID_TO_SKIP, timeSeries.getUniqueId());
+		assertNull(timeSeries.getDataType());
+	}
+
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@Test
+	public void getRoutingNotFoundTest() {
+		assertThrows(RuntimeException.class, () -> {
+			jsonDataDao.getRouting(TIME_SERIES_UNIQUE_ID_NOT_FOUND);
+		}, "should have thrown an exception but did not");
 	}
 
 	@Test

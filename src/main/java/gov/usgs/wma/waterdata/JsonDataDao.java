@@ -22,6 +22,9 @@ public class JsonDataDao {
 	@Value("classpath:sql/approvals.sql")
 	private Resource approvals;
 
+	@Value("classpath:sql/description.sql")
+	private Resource description;
+
 	@Value("classpath:sql/gapTolerances.sql")
 	private Resource gapTolerances;
 
@@ -59,10 +62,10 @@ public class JsonDataDao {
 	}
 
 	@Transactional
-	public TimeSeries doHeaderInfo(Long jsonDataId) {
+	public String doHeaderInfo(Long jsonDataId) {
 		return jdbcTemplate.queryForObject(
 				getSql(headerInfo),
-				new TimeSeriesRowMapper(),
+				String.class,
 				jsonDataId
 			);
 	}
@@ -85,6 +88,15 @@ public class JsonDataDao {
 	@Transactional
 	public void doQualifiers(Long jsonDataId) {
 		doUpdate(jsonDataId, qualifiers);
+	}
+
+	@Transactional
+	public TimeSeries getRouting(String timeSeriesUniqueId) {
+		return jdbcTemplate.queryForObject(
+				getSql(description),
+				new TimeSeriesRowMapper(),
+				timeSeriesUniqueId
+			);
 	}
 
 	@Transactional
