@@ -24,7 +24,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, JsonDataDao.class})
-@DatabaseSetup("classpath:/testData/jsonData/")
+@DatabaseSetup("classpath:/testData/staticData/")
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,

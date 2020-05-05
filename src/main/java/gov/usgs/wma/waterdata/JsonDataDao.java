@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,9 @@ public class JsonDataDao {
 
 	@Value("classpath:sql/approvals.sql")
 	private Resource approvals;
+
+	@Value("classpath:sql/description.sql")
+	private Resource description;
 
 	@Value("classpath:sql/gapTolerances.sql")
 	private Resource gapTolerances;
@@ -59,12 +63,20 @@ public class JsonDataDao {
 	}
 
 	@Transactional
-	public TimeSeries doHeaderInfo(Long jsonDataId) {
-		return jdbcTemplate.queryForObject(
-				getSql(headerInfo),
-				new TimeSeriesRowMapper(),
-				jsonDataId
-			);
+	public String doHeaderInfo(Long jsonDataId) {
+		try {
+			return jdbcTemplate.queryForObject(
+					getSql(headerInfo),
+					String.class,
+					jsonDataId
+				);
+		} catch (EmptyResultDataAccessException e) {
+			LOG.info("Couldn't find {} - {}", jsonDataId, e.getLocalizedMessage());
+			//Eat the no data exception if the JSON data is not found or
+			//has no time series unique ID. We cannot recover from this and
+			//should not trigger a state machine retry.
+			return null;
+		}
 	}
 
 	@Transactional
@@ -85,6 +97,15 @@ public class JsonDataDao {
 	@Transactional
 	public void doQualifiers(Long jsonDataId) {
 		doUpdate(jsonDataId, qualifiers);
+	}
+
+	@Transactional
+	public TimeSeries getRouting(String timeSeriesUniqueId) {
+		return jdbcTemplate.queryForObject(
+				getSql(description),
+				new TimeSeriesRowMapper(),
+				timeSeriesUniqueId
+			);
 	}
 
 	@Transactional

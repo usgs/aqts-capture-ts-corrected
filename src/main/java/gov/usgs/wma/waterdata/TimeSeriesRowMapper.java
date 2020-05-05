@@ -11,6 +11,7 @@ public class TimeSeriesRowMapper implements RowMapper<TimeSeries> {
 	public TimeSeries mapRow(ResultSet rs, int rowNum) throws SQLException {
 		TimeSeries timeSeries = new TimeSeries();
 		timeSeries.setUniqueId(rs.getString("time_series_unique_id"));
+		timeSeries.setDataType(rs.getString("data_type"));
 		return timeSeries;
 	}
 
