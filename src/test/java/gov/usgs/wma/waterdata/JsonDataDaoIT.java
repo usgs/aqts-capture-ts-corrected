@@ -162,13 +162,13 @@ public class JsonDataDaoIT {
 		assertNull(timeSeries.getDataType());
 	}
 
-	@DatabaseSetup("classpath:/testData/cleanseOutput/")
-	@Test
-	public void getRoutingNotFoundTest() {
-		assertThrows(RuntimeException.class, () -> {
-			jsonDataDao.getRouting(TIME_SERIES_UNIQUE_ID_NOT_FOUND);
-		}, "should have thrown an exception but did not");
-	}
+//	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+//	@Test
+//	public void getRoutingNotFoundTest() {
+//		assertThrows(RuntimeException.class, () -> {
+//			jsonDataDao.getRouting(TIME_SERIES_UNIQUE_ID_NOT_FOUND);
+//		}, "should have thrown an exception but did not");
+//	}
 
 	@Test
 	public void badResource() {
