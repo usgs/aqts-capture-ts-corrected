@@ -101,11 +101,17 @@ public class JsonDataDao {
 
 	@Transactional
 	public TimeSeries getRouting(String timeSeriesUniqueId) {
-		return jdbcTemplate.queryForObject(
-				getSql(description),
-				new TimeSeriesRowMapper(),
-				timeSeriesUniqueId
-			);
+		try {
+			return jdbcTemplate.queryForObject(
+					getSql(description),
+					new TimeSeriesRowMapper(),
+					timeSeriesUniqueId
+				);
+		} catch (EmptyResultDataAccessException e) {
+			LOG.info("Couldn't find {} - {}", timeSeriesUniqueId, e.getLocalizedMessage());
+			//Eat the no data exception these are rows we do not want to process.
+			return null;
+		}
 	}
 
 	@Transactional
