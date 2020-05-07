@@ -33,4 +33,3 @@ select json_data_id,
           from json_data
          where json_data_id = ?) a
  where time_series_unique_id is not null
-returning time_series_unique_id

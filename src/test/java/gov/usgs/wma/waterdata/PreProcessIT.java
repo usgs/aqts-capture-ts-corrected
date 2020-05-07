@@ -2,8 +2,7 @@ package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -87,11 +87,24 @@ public class PreProcessIT {
 		assertNotNull(result);
 		assertEquals(1, result.getTimeSeriesList().size());
 		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeriesList().get(0).getUniqueId());
-		try {
+
+		assertThrows(DuplicateKeyException.class, () -> {
 			preProcess.apply(request);
-			fail("This function is not set up to process the same file more than once and should fail if it is.");
-		} catch (Exception e) {
-			assertTrue(e instanceof DuplicateKeyException);
-		}
+		}, "This function is not set up to process the same file more than once and should fail if it does.");
+	}
+
+	@DatabaseSetup("classpath:/testData/staticData/")
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@ExpectedDatabase(
+			value="classpath:/testData/cleanseOutput/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+			)
+	@Test
+	public void rollbackTest() {
+		RequestObject request = new RequestObject();
+		request.setId(JsonDataDaoIT.JSON_DATA_ID_4);
+		assertThrows(EmptyResultDataAccessException.class, () -> {
+			preProcess.apply(request);
+		}, "This time series has no description and should have failed and rolled back time_series_header data.");
 	}
 }

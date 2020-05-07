@@ -1,5 +1,7 @@
 package gov.usgs.wma.waterdata;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -49,7 +51,9 @@ public class JsonDataDaoMicrosecondIT {
 	)
 	@Test
 	public void doApprovalsTest() {
-		jsonDataDao.doApprovals(JSON_DATA_ID_TENTHS);
+		assertDoesNotThrow(() -> {
+			jsonDataDao.doApprovals(JSON_DATA_ID_TENTHS);
+		}, "should not have thrown an exception but did");
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -59,7 +63,9 @@ public class JsonDataDaoMicrosecondIT {
 	)
 	@Test
 	public void doGapTolerancesTest() {
-		jsonDataDao.doGapTolerances(JSON_DATA_ID_TENTHS);
+		assertDoesNotThrow(() -> {
+			jsonDataDao.doGapTolerances(JSON_DATA_ID_TENTHS);
+		}, "should not have thrown an exception but did");
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -69,7 +75,9 @@ public class JsonDataDaoMicrosecondIT {
 	)
 	@Test
 	public void doGradesTest() {
-		jsonDataDao.doGrades(JSON_DATA_ID_TENTHS);
+		assertDoesNotThrow(() -> {
+			jsonDataDao.doGrades(JSON_DATA_ID_TENTHS);
+		}, "should not have thrown an exception but did");
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -79,7 +87,9 @@ public class JsonDataDaoMicrosecondIT {
 	)
 	@Test
 	public void doInterpolationTypesTest() {
-		jsonDataDao.doInterpolationTypes(JSON_DATA_ID_TENTHS);
+		assertDoesNotThrow(() -> {
+			jsonDataDao.doInterpolationTypes(JSON_DATA_ID_TENTHS);
+		}, "should not have thrown an exception but did");
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -89,7 +99,9 @@ public class JsonDataDaoMicrosecondIT {
 	)
 	@Test
 	public void doMethodsTest() {
-		jsonDataDao.doMethods(JSON_DATA_ID_TENTHS);
+		assertDoesNotThrow(() -> {
+			jsonDataDao.doMethods(JSON_DATA_ID_TENTHS);
+		}, "should not have thrown an exception but did");
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -99,6 +111,8 @@ public class JsonDataDaoMicrosecondIT {
 	)
 	@Test
 	public void doQualifiersTest() {
-		jsonDataDao.doQualifiers(JSON_DATA_ID_TENTHS);
+		assertDoesNotThrow(() -> {
+			jsonDataDao.doQualifiers(JSON_DATA_ID_TENTHS);
+		}, "should not have thrown an exception but did");
 	}
 }

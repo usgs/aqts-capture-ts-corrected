@@ -26,17 +26,14 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 		return processRequest(request);
 	}
 
+	@Transactional
 	protected ResultObject processRequest(RequestObject request) {
 		LOG.debug("json_data_id: {}", request.getId());
 		ResultObject result = new ResultObject();
 
-		String timeSeriesUniqueId = jsonDataDao.doHeaderInfo(request.getId());
-		if (null == timeSeriesUniqueId) {
-			// We can do nothing further if the data doesn't have a time series unique id
-			return result;
-		}
+		jsonDataDao.doHeaderInfo(request.getId());
 
-		TimeSeries timeSeries = jsonDataDao.getRouting(timeSeriesUniqueId);
+		TimeSeries timeSeries = jsonDataDao.getRouting(request.getId());
 		// getRouting throws a runtime error if the time series description is not available. 
 		//   That way the state machine will error and this data will get reprocessed after the 
 		//   description is available. (Any data updates will also be rolled back.)
