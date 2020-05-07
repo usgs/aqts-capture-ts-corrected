@@ -173,18 +173,6 @@ public class JsonDataDaoIT {
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
-			value="classpath:/testResult/processMicroseconds/timeSeriesPoints/",
-			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
-			)
-	@Test
-	public void doPoints2400Test() {
-		assertDoesNotThrow(() -> {
-			jsonDataDao.doPoints(JsonDataDaoIT.JSON_DATA_ID_3);
-		}, "should not have thrown an exception but did");
-	}
-
-	@DatabaseSetup("classpath:/testData/cleanseOutput/")
-	@ExpectedDatabase(
 			value="classpath:/testResult/happyPath/timeSeriesQualifiers/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
