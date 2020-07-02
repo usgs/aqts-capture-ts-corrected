@@ -85,8 +85,7 @@ public class PreProcessIT {
 		request.setId(JsonDataDaoIT.JSON_DATA_ID_1);
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
-		assertEquals(1, result.getTimeSeriesList().size());
-		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeriesList().get(0).getUniqueId());
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeries().getUniqueId());
 
 		assertThrows(DuplicateKeyException.class, () -> {
 			preProcess.apply(request);

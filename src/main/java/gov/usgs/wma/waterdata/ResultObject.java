@@ -1,14 +1,12 @@
 package gov.usgs.wma.waterdata;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ResultObject {
-	private List<TimeSeries> timeSeriesList;
-	public List<TimeSeries> getTimeSeriesList() {
-		return null != timeSeriesList ? timeSeriesList : new ArrayList<TimeSeries>();
+	private TimeSeries timeSeries;
+	public TimeSeries getTimeSeries() {
+		return null != timeSeries ? timeSeries : new TimeSeries();
 	}
-	public void setTimeSeriesList(List<TimeSeries> timeSeriesList) {
-		this.timeSeriesList = timeSeriesList;
+	public void setTimeSeries(TimeSeries timeSeries) {
+		this.timeSeries = timeSeries;
 	}
 }

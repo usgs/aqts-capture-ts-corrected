@@ -40,7 +40,7 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 		// Otherwise check to see if the data is a type which we currently process.
 		if (null != timeSeries.getDataType()) {
 			//If it is, process the remaining data and pass on the pertinent information.
-			result.setTimeSeriesList(Arrays.asList(timeSeries));
+			result.setTimeSeries(timeSeries);
 			jsonDataDao.doApprovals(request.getId());
 			jsonDataDao.doGapTolerances(request.getId());
 			jsonDataDao.doGrades(request.getId());
