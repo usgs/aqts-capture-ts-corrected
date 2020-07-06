@@ -49,7 +49,8 @@ public class JsonDataDao {
 
 	@Transactional
 	public void doApprovals(Long jsonDataId) {
-		doUpdate(jsonDataId, approvals);
+//		doUpdate(jsonDataId, approvals);
+		jdbcTemplate.update(getSql(approvals), jsonDataId, 7);
 	}
 
 	@Transactional
