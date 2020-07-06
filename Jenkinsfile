@@ -16,7 +16,9 @@ pipeline {
     }
     stage('get and install the zip file for lambda consumption') {
       agent {
-        dockerfile true
+        dockerfile {
+            label 'team:iow'
+        }
       }
       steps {
         sh '''
