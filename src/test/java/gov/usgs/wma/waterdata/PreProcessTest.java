@@ -3,7 +3,6 @@ package gov.usgs.wma.waterdata;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -15,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
+
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE)
 public class PreProcessTest {
@@ -56,7 +56,7 @@ public class PreProcessTest {
 		timeSeries.setDataType(null);
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
-		assertTrue(result.getTimeSeriesList().isEmpty());
+		assertNotNull(result.getTimeSeries());
 		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1);
 		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1);
 		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID_1);
@@ -73,9 +73,8 @@ public class PreProcessTest {
 		timeSeries.setDataType(JsonDataDaoIT.PROCESS_DATA_TYPE);
 		ResultObject result = preProcess.processRequest(request);
 		assertNotNull(result);
-		assertEquals(1, result.getTimeSeriesList().size());
-		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeriesList().get(0).getUniqueId());
-		assertEquals(JsonDataDaoIT.PROCESS_DATA_TYPE, result.getTimeSeriesList().get(0).getDataType());
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeries().getUniqueId());
+		assertEquals(JsonDataDaoIT.PROCESS_DATA_TYPE, result.getTimeSeries().getDataType());
 		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1);
 		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1);
 		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID_1);
