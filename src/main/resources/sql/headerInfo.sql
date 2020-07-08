@@ -8,7 +8,8 @@ insert
                                 time_range_end,
                                 response_time,
                                 response_version,
-                                location_identifier
+                                location_identifier,
+                                partition_number
                                )
 select json_data_id,
        time_series_unique_id,
@@ -19,7 +20,8 @@ select json_data_id,
        adjust_timestamp(time_range_end_text) time_range_end,
        response_time,
        response_version,
-       location_identifier
+       location_identifier,
+       partition_number
   from (select json_data_id,
                jsonb_extract_path_text(json_content, 'UniqueId') time_series_unique_id,
                jsonb_extract_path(json_content, 'Notes') notes,
@@ -29,7 +31,9 @@ select json_data_id,
                jsonb_extract_path_text(json_content, 'TimeRange', 'EndTime') time_range_end_text,
                jsonb_extract_path_text(json_content, 'ResponseTime')::timestamp response_time,
                jsonb_extract_path_text(json_content, 'ResponseVersion')::numeric response_version,
-               jsonb_extract_path_text(json_content, 'LocationIdentifier') location_identifier
+               jsonb_extract_path_text(json_content, 'LocationIdentifier') location_identifier,
+               partition_number
           from json_data
-         where json_data_id = ?) a
+         where json_data_id = ?
+           and partition_number = ?) a
  where time_series_unique_id is not null
