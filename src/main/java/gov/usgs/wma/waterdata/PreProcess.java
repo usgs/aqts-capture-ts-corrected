@@ -1,6 +1,5 @@
 package gov.usgs.wma.waterdata;
 
-import java.util.Arrays;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -28,12 +27,13 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 
 	@Transactional
 	protected ResultObject processRequest(RequestObject request) {
-		LOG.debug("json_data_id: {}", request.getId());
+		Long jsonDataId = request.getId();
+		Integer partitionNumber = request.getPartitionNumber();
+		LOG.debug("json_data_id: {}, partition number: {}", jsonDataId, partitionNumber);
 		ResultObject result = new ResultObject();
+		jsonDataDao.doHeaderInfo(jsonDataId, partitionNumber);
 
-		jsonDataDao.doHeaderInfo(request.getId());
-
-		TimeSeries timeSeries = jsonDataDao.getRouting(request.getId());
+		TimeSeries timeSeries = jsonDataDao.getRouting(jsonDataId, partitionNumber);
 		// getRouting throws a runtime error if the time series description is not available. 
 		//   That way the state machine will error and this data will get reprocessed after the 
 		//   description is available. (Any data updates will also be rolled back.)
@@ -41,13 +41,13 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 		if (null != timeSeries.getDataType()) {
 			//If it is, process the remaining data and pass on the pertinent information.
 			result.setTimeSeries(timeSeries);
-			jsonDataDao.doApprovals(request.getId());
-			jsonDataDao.doGapTolerances(request.getId());
-			jsonDataDao.doGrades(request.getId());
-			jsonDataDao.doInterpolationTypes(request.getId());
-			jsonDataDao.doMethods(request.getId());
-			jsonDataDao.doPoints(request.getId());
-			jsonDataDao.doQualifiers(request.getId());
+			jsonDataDao.doApprovals(jsonDataId, partitionNumber);
+			jsonDataDao.doGapTolerances(jsonDataId, partitionNumber);
+			jsonDataDao.doGrades(jsonDataId, partitionNumber);
+			jsonDataDao.doInterpolationTypes(jsonDataId, partitionNumber);
+			jsonDataDao.doMethods(jsonDataId, partitionNumber);
+			jsonDataDao.doPoints(jsonDataId, partitionNumber);
+			jsonDataDao.doQualifiers(jsonDataId, partitionNumber);
 		}
 
 		return result;

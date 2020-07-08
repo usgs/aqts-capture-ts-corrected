@@ -83,6 +83,7 @@ public class PreProcessIT {
 	public void fullTest() {
 		RequestObject request = new RequestObject();
 		request.setId(JsonDataDaoIT.JSON_DATA_ID_1);
+		request.setPartitionNumber(JsonDataDaoIT.PARTITION_NUMBER);
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
 		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeries().getUniqueId());

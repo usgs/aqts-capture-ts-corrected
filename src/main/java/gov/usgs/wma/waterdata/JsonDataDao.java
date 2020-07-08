@@ -48,63 +48,62 @@ public class JsonDataDao {
 	private Resource routing;
 
 	@Transactional
-	public void doApprovals(Long jsonDataId) {
-		doUpdate(jsonDataId, approvals);
+	public void doApprovals(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, approvals, partitionNumber);
 	}
 
 	@Transactional
-	public void doGapTolerances(Long jsonDataId) {
-		doUpdate(jsonDataId, gapTolerances);
+	public void doGapTolerances(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, gapTolerances, partitionNumber);
 	}
 
 	@Transactional
-	public void doGrades(Long jsonDataId) {
-		doUpdate(jsonDataId, grades);
+	public void doGrades(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, grades, partitionNumber);
 	}
 
 	@Transactional
-	public void doHeaderInfo(Long jsonDataId) {
-		doUpdate(jsonDataId, headerInfo);
+	public void doHeaderInfo(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, headerInfo, partitionNumber);
 	}
 
 	@Transactional
-	public void doInterpolationTypes(Long jsonDataId) {
-		doUpdate(jsonDataId, interpolationTypes);
+	public void doInterpolationTypes(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, interpolationTypes, partitionNumber);
 	}
 
 	@Transactional
-	public void doMethods(Long jsonDataId) {
-		doUpdate(jsonDataId, methods);
+	public void doMethods(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, methods, partitionNumber);
 	}
 
 	@Transactional
-	public void doPoints(Long jsonDataId) {
-		doUpdate(jsonDataId, points);
+	public void doPoints(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, points, partitionNumber);
 	}
 
 	@Transactional
-	public void doQualifiers(Long jsonDataId) {
-		doUpdate(jsonDataId, qualifiers);
+	public void doQualifiers(Long jsonDataId, Integer partitionNumber) {
+		doUpdate(jsonDataId, qualifiers, partitionNumber);
 	}
 
 	@Transactional
-	public TimeSeries getRouting(Long jsonDataId) {
+	public TimeSeries getRouting(Long jsonDataId, Integer partitionNumber) {
 		return jdbcTemplate.queryForObject(
 				getSql(routing),
 				new TimeSeriesRowMapper(),
 				jsonDataId,
-				// TODO 7 (partitionNumber) should come from the request object
-				7
+				partitionNumber
 			);
 	}
 
 	@Transactional
-	protected void doUpdate(Long jsonDataId, Resource resource) {
+	protected void doUpdate(Long jsonDataId, Resource resource, Integer partitionNumber) {
 		jdbcTemplate.update(
 				getSql(resource),
 				jsonDataId,
-				// TODO 7 (partitionNumber) should come from the request object
-				7 );
+				partitionNumber
+		);
 	}
 
 	protected String getSql(Resource resource) {

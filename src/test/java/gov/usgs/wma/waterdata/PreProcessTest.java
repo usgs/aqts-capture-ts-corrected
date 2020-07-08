@@ -3,6 +3,7 @@ package gov.usgs.wma.waterdata;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -30,24 +31,25 @@ public class PreProcessTest {
 		preProcess = new PreProcess(jsonDataDao);
 		request = new RequestObject();
 		request.setId(JsonDataDaoIT.JSON_DATA_ID_1);
+		request.setPartitionNumber(JsonDataDaoIT.PARTITION_NUMBER);
 		timeSeries = new TimeSeries();
-		when(jsonDataDao.getRouting(anyLong())).thenReturn(timeSeries);
+		when(jsonDataDao.getRouting(anyLong(), anyInt())).thenReturn(timeSeries);
 	}
 
 	@Test
 	public void notFoundTimeSeriesTest() {
-		when(jsonDataDao.getRouting(anyLong())).thenThrow(new EmptyResultDataAccessException(1));
+		when(jsonDataDao.getRouting(anyLong(), anyInt())).thenThrow(new EmptyResultDataAccessException(1));
 		assertThrows(EmptyResultDataAccessException.class, () -> {
 			preProcess.apply(request);
 		}, "should have thrown an exception but did not");
-		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doMethods(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doPoints(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).getRouting(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doMethods(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doPoints(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).getRouting(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
 	}
 
 	@Test
@@ -57,14 +59,14 @@ public class PreProcessTest {
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
 		assertNotNull(result.getTimeSeries());
-		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doMethods(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao, never()).doPoints(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).getRouting(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao, never()).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doGrades(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doMethods(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao, never()).doPoints(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).getRouting(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
 	}
 
 	@Test
@@ -75,13 +77,13 @@ public class PreProcessTest {
 		assertNotNull(result);
 		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID, result.getTimeSeries().getUniqueId());
 		assertEquals(JsonDataDaoIT.PROCESS_DATA_TYPE, result.getTimeSeries().getDataType());
-		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doMethods(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).doPoints(JsonDataDaoIT.JSON_DATA_ID_1);
-		verify(jsonDataDao).getRouting(JsonDataDaoIT.JSON_DATA_ID_1);
+		verify(jsonDataDao).doApprovals(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doGapTolerances(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doGrades(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doInterpolationTypes(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doMethods(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).doPoints(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
+		verify(jsonDataDao).getRouting(JsonDataDaoIT.JSON_DATA_ID_1, JsonDataDaoIT.PARTITION_NUMBER);
 	}
 }

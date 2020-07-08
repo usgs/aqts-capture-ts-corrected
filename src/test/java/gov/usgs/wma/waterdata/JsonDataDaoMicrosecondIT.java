@@ -42,7 +42,7 @@ public class JsonDataDaoMicrosecondIT {
 	@Autowired
 	private JsonDataDao jsonDataDao;
 
-	public static final Long JSON_DATA_ID_TENTHS = 2l;
+	public static final Long JSON_DATA_ID_TENTHS = 2L;
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
@@ -52,7 +52,7 @@ public class JsonDataDaoMicrosecondIT {
 	@Test
 	public void doApprovalsTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doApprovals(JSON_DATA_ID_TENTHS);
+			jsonDataDao.doApprovals(JSON_DATA_ID_TENTHS, JsonDataDaoIT.PARTITION_NUMBER);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -64,7 +64,7 @@ public class JsonDataDaoMicrosecondIT {
 	@Test
 	public void doGapTolerancesTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doGapTolerances(JSON_DATA_ID_TENTHS);
+			jsonDataDao.doGapTolerances(JSON_DATA_ID_TENTHS, JsonDataDaoIT.PARTITION_NUMBER);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -76,7 +76,7 @@ public class JsonDataDaoMicrosecondIT {
 	@Test
 	public void doGradesTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doGrades(JSON_DATA_ID_TENTHS);
+			jsonDataDao.doGrades(JSON_DATA_ID_TENTHS, JsonDataDaoIT.PARTITION_NUMBER);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -88,7 +88,7 @@ public class JsonDataDaoMicrosecondIT {
 	@Test
 	public void doInterpolationTypesTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doInterpolationTypes(JSON_DATA_ID_TENTHS);
+			jsonDataDao.doInterpolationTypes(JSON_DATA_ID_TENTHS, JsonDataDaoIT.PARTITION_NUMBER);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -100,7 +100,7 @@ public class JsonDataDaoMicrosecondIT {
 	@Test
 	public void doMethodsTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doMethods(JSON_DATA_ID_TENTHS);
+			jsonDataDao.doMethods(JSON_DATA_ID_TENTHS, JsonDataDaoIT.PARTITION_NUMBER);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -112,7 +112,7 @@ public class JsonDataDaoMicrosecondIT {
 	@Test
 	public void doQualifiersTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doQualifiers(JSON_DATA_ID_TENTHS);
+			jsonDataDao.doQualifiers(JSON_DATA_ID_TENTHS, JsonDataDaoIT.PARTITION_NUMBER);
 		}, "should not have thrown an exception but did");
 	}
 }
