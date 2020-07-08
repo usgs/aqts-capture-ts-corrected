@@ -12,7 +12,7 @@ select json_data_id,
        partition_number
   from (select json_data_id,
                jsonb_array_elements(jsonb_extract_path(json_content, 'InterpolationTypes')) interpolation_types,
-  			   partition_number
+               partition_number
           from json_data
          where json_data_id = ?
            and partition_number = ?) a

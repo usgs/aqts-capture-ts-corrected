@@ -17,10 +17,10 @@ select json_data_id,
        jsonb_extract_path_text(approvals, 'ApprovalLevel')::numeric approval_level,
        jsonb_extract_path_text(approvals, 'LevelDescription') level_description,
        adjust_timestamp(jsonb_extract_path_text(approvals, 'DateAppliedUtc')) date_applied_utc,
-	   partition_number
+       partition_number
   from (select json_data_id,
                jsonb_array_elements(jsonb_extract_path(json_content, 'Approvals')) approvals,
-  			   partition_number
+               partition_number
           from json_data
          where json_data_id = ?
-      	   and partition_number = ?) a
+           and partition_number = ?) a
