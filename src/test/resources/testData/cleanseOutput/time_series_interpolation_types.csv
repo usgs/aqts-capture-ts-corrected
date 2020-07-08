@@ -1,1 +1,1 @@
-time_series_interpolation_types_id,json_data_id,start_time,end_time,interpolation_type
+time_series_interpolation_types_id,json_data_id,start_time,end_time,interpolation_type,partition_number

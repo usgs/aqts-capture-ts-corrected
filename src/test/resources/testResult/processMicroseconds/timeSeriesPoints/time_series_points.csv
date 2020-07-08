@@ -1,3 +1,3 @@
-json_data_id,time_step,numeric_value,display_value
-3,2016-08-24 00:00:00,17.28179955786044,17.28
-3,2016-08-26 00:00:00,17.32467180279911,17.32
+json_data_id,time_step,numeric_value,display_value,partition_number
+3,2016-08-24 00:00:00,17.28179955786044,17.28,7
+3,2016-08-26 00:00:00,17.32467180279911,17.32,7

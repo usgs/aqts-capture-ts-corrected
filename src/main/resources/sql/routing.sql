@@ -7,3 +7,4 @@ select time_series_description.time_series_unique_id,
          on time_series_description.parm_cd = data_type_mapping.parm_cd and
             time_series_description.stat_cd = data_type_mapping.stat_cd
  where time_series_header_info.json_data_id = ?
+   and time_series_header_info.partition_number = ?

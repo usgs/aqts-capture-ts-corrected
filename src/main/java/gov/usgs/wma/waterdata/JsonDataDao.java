@@ -92,7 +92,9 @@ public class JsonDataDao {
 		return jdbcTemplate.queryForObject(
 				getSql(routing),
 				new TimeSeriesRowMapper(),
-				jsonDataId
+				jsonDataId,
+				// TODO 7 (partitionNumber) should come from the request object
+				7
 			);
 	}
 
