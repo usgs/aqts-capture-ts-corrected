@@ -49,8 +49,7 @@ public class JsonDataDao {
 
 	@Transactional
 	public void doApprovals(Long jsonDataId) {
-//		doUpdate(jsonDataId, approvals);
-		jdbcTemplate.update(getSql(approvals), jsonDataId, 7);
+		doUpdate(jsonDataId, approvals);
 	}
 
 	@Transactional
@@ -99,7 +98,11 @@ public class JsonDataDao {
 
 	@Transactional
 	protected void doUpdate(Long jsonDataId, Resource resource) {
-		jdbcTemplate.update(getSql(resource), jsonDataId);
+		jdbcTemplate.update(
+				getSql(resource),
+				jsonDataId,
+				// TODO 7 (partitionNumber) should come from the request object
+				7 );
 	}
 
 	protected String getSql(Resource resource) {
