@@ -31,9 +31,9 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 		Integer partitionNumber = request.getPartitionNumber();
 		LOG.debug("json_data_id: {}, partition number: {}", jsonDataId, partitionNumber);
 		ResultObject result = new ResultObject();
-		jsonDataDao.doHeaderInfo(jsonDataId, partitionNumber);
+		jsonDataDao.doHeaderInfo(request);
 
-		TimeSeries timeSeries = jsonDataDao.getRouting(jsonDataId, partitionNumber);
+		TimeSeries timeSeries = jsonDataDao.getRouting(request);
 		// getRouting throws a runtime error if the time series description is not available. 
 		//   That way the state machine will error and this data will get reprocessed after the 
 		//   description is available. (Any data updates will also be rolled back.)
@@ -41,13 +41,13 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 		if (null != timeSeries.getDataType()) {
 			//If it is, process the remaining data and pass on the pertinent information.
 			result.setTimeSeries(timeSeries);
-			jsonDataDao.doApprovals(jsonDataId, partitionNumber);
-			jsonDataDao.doGapTolerances(jsonDataId, partitionNumber);
-			jsonDataDao.doGrades(jsonDataId, partitionNumber);
-			jsonDataDao.doInterpolationTypes(jsonDataId, partitionNumber);
-			jsonDataDao.doMethods(jsonDataId, partitionNumber);
-			jsonDataDao.doPoints(jsonDataId, partitionNumber);
-			jsonDataDao.doQualifiers(jsonDataId, partitionNumber);
+			jsonDataDao.doApprovals(request);
+			jsonDataDao.doGapTolerances(request);
+			jsonDataDao.doGrades(request);
+			jsonDataDao.doInterpolationTypes(request);
+			jsonDataDao.doMethods(request);
+			jsonDataDao.doPoints(request);
+			jsonDataDao.doQualifiers(request);
 		}
 
 		return result;

@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -48,6 +51,7 @@ public class JsonDataDaoIT {
 
 	@Autowired
 	private JsonDataDao jsonDataDao;
+	private RequestObject request;
 
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_4 = 4L;
@@ -57,6 +61,13 @@ public class JsonDataDaoIT {
 	public static final String PROCESS_DATA_TYPE = "tsDailyValueStatisticalTransform";
 	public static final Integer PARTITION_NUMBER = 7;
 
+	@BeforeEach
+	public void beforeEach() {
+		request = new RequestObject();
+		request.setId(JsonDataDaoIT.JSON_DATA_ID_1);
+		request.setPartitionNumber(JsonDataDaoIT.PARTITION_NUMBER);
+	}
+
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
 			value="classpath:/testResult/happyPath/timeSeriesApprovals/",
@@ -65,7 +76,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doApprovalsTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doApprovals(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doApprovals(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -77,7 +88,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doGapTolerancesTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doGapTolerances(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doGapTolerances(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -89,7 +100,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doGradesTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doGrades(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doGrades(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -101,7 +112,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doHeaderInfoTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doHeaderInfo(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doHeaderInfo(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -112,8 +123,9 @@ public class JsonDataDaoIT {
 			)
 	@Test
 	public void doHeaderInfoNoIdTest() {
+		request.setId(JSON_DATA_ID_4);
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doHeaderInfo(JSON_DATA_ID_4, PARTITION_NUMBER);
+			jsonDataDao.doHeaderInfo(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -125,11 +137,11 @@ public class JsonDataDaoIT {
 	@Test
 	public void doHeaderInfoDuplicateTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doHeaderInfo(request);
 		}, "should not have thrown an exception but did");
 
 		assertThrows(DuplicateKeyException.class, () -> {
-			jsonDataDao.doHeaderInfo(JsonDataDaoIT.JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doHeaderInfo(request);
 		}, "should have thrown a duplicate key exception but did not");
 	}
 
@@ -141,7 +153,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doInterpolationTypesTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doInterpolationTypes(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doInterpolationTypes(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -153,7 +165,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doMethodsTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doMethods(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doMethods(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -165,7 +177,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doPointsTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doPoints(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doPoints(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -177,7 +189,7 @@ public class JsonDataDaoIT {
 	@Test
 	public void doQualifiersTest() {
 		assertDoesNotThrow(() -> {
-			jsonDataDao.doQualifiers(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.doQualifiers(request);
 		}, "should not have thrown an exception but did");
 	}
 
@@ -185,7 +197,7 @@ public class JsonDataDaoIT {
 	@DatabaseSetup("classpath:/testData/routing/")
 	@Test
 	public void getRoutingToProcessTest() {
-		TimeSeries timeSeries = jsonDataDao.getRouting(JSON_DATA_ID_1, PARTITION_NUMBER);
+		TimeSeries timeSeries = jsonDataDao.getRouting(request);
 		assertNotNull(timeSeries);
 		assertEquals(TIME_SERIES_UNIQUE_ID, timeSeries.getUniqueId());
 		assertEquals(PROCESS_DATA_TYPE, timeSeries.getDataType());
@@ -195,7 +207,8 @@ public class JsonDataDaoIT {
 	@DatabaseSetup("classpath:/testData/routing/")
 	@Test
 	public void getRoutingToSkipTest() {
-		TimeSeries timeSeries = jsonDataDao.getRouting(JSON_DATA_ID_5, PARTITION_NUMBER);
+		request.setId(JSON_DATA_ID_5);
+		TimeSeries timeSeries = jsonDataDao.getRouting(request);
 		assertNotNull(timeSeries);
 		assertEquals(TIME_SERIES_UNIQUE_ID_TO_SKIP, timeSeries.getUniqueId());
 		assertNull(timeSeries.getDataType());
@@ -205,15 +218,16 @@ public class JsonDataDaoIT {
 	@Test
 	public void getRoutingNotFoundTest() {
 		assertThrows(EmptyResultDataAccessException.class, () -> {
-			jsonDataDao.getRouting(JSON_DATA_ID_1, PARTITION_NUMBER);
+			jsonDataDao.getRouting(request);
 		}, "should have thrown an exception but did not");
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@Test
 	public void getRoutingNoGuidTest() {
+		request.setId(JSON_DATA_ID_4);
 		assertThrows(EmptyResultDataAccessException.class, () -> {
-			jsonDataDao.getRouting(JSON_DATA_ID_4, PARTITION_NUMBER);
+			jsonDataDao.getRouting(request);
 		}, "should have thrown an exception but did not");
 	}
 
