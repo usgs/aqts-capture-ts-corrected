@@ -27,9 +27,7 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 
 	@Transactional
 	protected ResultObject processRequest(RequestObject request) {
-		Long jsonDataId = request.getId();
-		Integer partitionNumber = request.getPartitionNumber();
-		LOG.debug("json_data_id: {}, partition number: {}", jsonDataId, partitionNumber);
+		LOG.debug("json_data_id: {}, partition number: {}", request.getId(), request.getPartitionNumber());
 		ResultObject result = new ResultObject();
 		jsonDataDao.doHeaderInfo(request);
 
