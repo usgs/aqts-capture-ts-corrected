@@ -6,7 +6,8 @@ insert
                               approval_comment,
                               approval_level,
                               level_description,
-                              date_applied_utc
+                              date_applied_utc,
+                              partition_number
                              )
 select json_data_id,
        adjust_timestamp(jsonb_extract_path_text(approvals, 'StartTime')) start_time,
@@ -15,8 +16,11 @@ select json_data_id,
        jsonb_extract_path_text(approvals, 'Comment') approval_comment,
        jsonb_extract_path_text(approvals, 'ApprovalLevel')::numeric approval_level,
        jsonb_extract_path_text(approvals, 'LevelDescription') level_description,
-       adjust_timestamp(jsonb_extract_path_text(approvals, 'DateAppliedUtc')) date_applied_utc
+       adjust_timestamp(jsonb_extract_path_text(approvals, 'DateAppliedUtc')) date_applied_utc,
+       partition_number
   from (select json_data_id,
-               jsonb_array_elements(jsonb_extract_path(json_content, 'Approvals')) approvals
+               jsonb_array_elements(jsonb_extract_path(json_content, 'Approvals')) approvals,
+               partition_number
           from json_data
-         where json_data_id = ?) a
+         where json_data_id = ?
+           and partition_number = ?) a
