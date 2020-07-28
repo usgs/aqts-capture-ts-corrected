@@ -54,10 +54,10 @@ public class PreProcessTest {
 	@Test
 	public void notFoundRoutingTest() {
 		timeSeries.setUniqueId(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID);
-		timeSeries.setDataType(null);
 		ResultObject result = preProcess.apply(request);
 		assertNotNull(result);
 		assertNotNull(result.getTimeSeries());
+		assertEquals("other", result.getTimeSeries().getDataType());
 		verify(jsonDataDao, never()).doApprovals(request);
 		verify(jsonDataDao, never()).doGapTolerances(request);
 		verify(jsonDataDao, never()).doGrades(request);
