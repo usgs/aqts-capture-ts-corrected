@@ -46,6 +46,9 @@ public class PreProcess implements Function<RequestObject, ResultObject> {
 			jsonDataDao.doMethods(request);
 			jsonDataDao.doPoints(request);
 			jsonDataDao.doQualifiers(request);
+		} else {
+			timeSeries.setDataType("other");
+			result.setTimeSeries(timeSeries);
 		}
 
 		return result;
