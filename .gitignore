@@ -7,3 +7,5 @@
 /application.yml
 .idea/
 aqts-capture-ts-corrected.iml
+.serverless/
+node_modules/
