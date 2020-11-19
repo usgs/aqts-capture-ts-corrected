@@ -28,6 +28,3 @@ To additionally start up a Docker database and run the integration tests of the 
 ```.sh
 mvn verify -DTESTING_DATABASE_PORT=5437 -DTESTING_DATABASE_ADDRESS=localhost -DTESTING_DATABASE_NETWORK=aqts -DROOT_LOG_LEVEL=INFO
 ```
-
-### LocalStack
-TBD
