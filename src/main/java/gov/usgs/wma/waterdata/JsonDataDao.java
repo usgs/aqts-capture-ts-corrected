@@ -16,6 +16,9 @@ import org.springframework.util.FileCopyUtils;
 public class JsonDataDao {
 	private static final Logger LOG = LoggerFactory.getLogger(JsonDataDao.class);
 
+	public static final String INSTANTANEOUS = "instantaneous";
+	public static final String INSTANTANEOUS_TRANSFORM = "instantaneousTransform";
+
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
@@ -89,12 +92,21 @@ public class JsonDataDao {
 
 	@Transactional
 	public TimeSeries getRouting(RequestObject request) {
-		return jdbcTemplate.queryForObject(
+		TimeSeries timeSeries = jdbcTemplate.queryForObject(
 				getSql(routing),
 				new TimeSeriesRowMapper(),
 				request.getId(),
 				request.getPartitionNumber()
 			);
+		// IOW-565 Initially we do not have any parm_cd + stat_cd mappings for instantaneous values.  We are saying that
+		// an instantaneous time series is one that has a computation_identifier of "Instantaneous".  These time series
+		// also seem to correspond with stat_cd "00011" but the computation_identifier is probably fine for a first pass.
+		// We want to set the data type as "instantaneousTransform" so that the downstream state machine choice can
+		// point this packet of data at the proper transform lambda for instantaneous values.
+		if (INSTANTANEOUS.equalsIgnoreCase(timeSeries.getComputationIdentifier().trim())) {
+			timeSeries.setDataType(INSTANTANEOUS_TRANSFORM);
+		}
+		return timeSeries;
 	}
 
 	@Transactional

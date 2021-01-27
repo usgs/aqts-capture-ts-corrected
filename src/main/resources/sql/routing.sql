@@ -1,5 +1,6 @@
 select time_series_description.time_series_unique_id,
-       data_type_mapping.data_type
+       data_type_mapping.data_type,
+       time_series_description.computation_identifier
   from time_series_header_info
        join time_series_description
          on time_series_header_info.time_series_unique_id = time_series_description.time_series_unique_id

@@ -12,6 +12,7 @@ public class TimeSeriesRowMapper implements RowMapper<TimeSeries> {
 		TimeSeries timeSeries = new TimeSeries();
 		timeSeries.setUniqueId(rs.getString("time_series_unique_id"));
 		timeSeries.setDataType(rs.getString("data_type"));
+		timeSeries.setComputationIdentifier(rs.getString("computation_identifier"));
 		return timeSeries;
 	}
 

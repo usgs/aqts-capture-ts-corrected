@@ -54,9 +54,12 @@ public class JsonDataDaoIT {
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_4 = 4L;
 	public static final Long JSON_DATA_ID_5 = 5L;
+	public static final Long JSON_DATA_ID_6 = 6L;
 	public static final String TIME_SERIES_UNIQUE_ID = "d9a9bcc1106a4819ad4e7a4f64894ceb";
+	public static final String TIME_SERIES_UNIQUE_ID_INSTANTANEOUS = "e9a9bcc1106a4819ad4e7a4f64894cec";
 	public static final String TIME_SERIES_UNIQUE_ID_TO_SKIP = "skipme";
 	public static final String PROCESS_DATA_TYPE = "tsDailyValueStatisticalTransform";
+	public static final String PROCESS_DATA_TYPE_INSTANTANEOUS = "instantaneousTransform";
 	public static final Integer PARTITION_NUMBER = 7;
 
 	@BeforeEach
@@ -227,6 +230,17 @@ public class JsonDataDaoIT {
 		assertThrows(EmptyResultDataAccessException.class, () -> {
 			jsonDataDao.getRouting(request);
 		}, "should have thrown an exception but did not");
+	}
+
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@DatabaseSetup("classpath:/testData/routing/")
+	@Test
+	public void getRoutingToProcessInstantaneousTest() {
+		request.setId(JSON_DATA_ID_6);
+		TimeSeries timeSeries = jsonDataDao.getRouting(request);
+		assertNotNull(timeSeries);
+		assertEquals(TIME_SERIES_UNIQUE_ID_INSTANTANEOUS, timeSeries.getUniqueId());
+		assertEquals(PROCESS_DATA_TYPE_INSTANTANEOUS, timeSeries.getDataType());
 	}
 
 	@Test

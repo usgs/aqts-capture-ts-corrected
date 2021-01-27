@@ -1,0 +1,2 @@
+"json_data_id","time_series_unique_id","notes","summary","num_points","time_range_start","time_range_end","response_time","response_version","location_identifier","partition_number"
+6,e9a9bcc1106a4819ad4e7a4f64894cec,"[]",Produced by AQUARIUS Time-Series Software. The accuracy and reliability of this data is not guaranteed.  Aquatic Informatics Inc. accepts no liability for its use in any way.,38,"2016-08-24 00:00:00","2016-09-30 00:00:00","2020-02-06 18:51:21.178259",1,"415956073241501",7

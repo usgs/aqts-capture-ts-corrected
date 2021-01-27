@@ -96,6 +96,55 @@ public class PreProcessIT {
 	@DatabaseSetup("classpath:/testData/staticData/")
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesApprovals/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesGapTolerances/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesGrades/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesHeaderInfo/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesInterpolationTypes/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesMethods/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesPoints/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@ExpectedDatabase(
+			value="classpath:/testResult/instantaneous/timeSeriesQualifiers/",
+			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
+	)
+	@Test
+	public void instantaneousFullTest() {
+		RequestObject request = new RequestObject();
+		request.setId(JsonDataDaoIT.JSON_DATA_ID_6);
+		request.setPartitionNumber(JsonDataDaoIT.PARTITION_NUMBER);
+		ResultObject result = preProcess.apply(request);
+		assertNotNull(result);
+		assertEquals(JsonDataDaoIT.TIME_SERIES_UNIQUE_ID_INSTANTANEOUS, result.getTimeSeries().getUniqueId());
+		assertEquals(JsonDataDaoIT.PROCESS_DATA_TYPE_INSTANTANEOUS, result.getTimeSeries().getDataType());
+
+		assertThrows(DuplicateKeyException.class, () -> {
+			preProcess.apply(request);
+		}, "This function is not set up to process the same file more than once and should fail if it does.");
+	}
+
+	@DatabaseSetup("classpath:/testData/staticData/")
+	@DatabaseSetup("classpath:/testData/cleanseOutput/")
+	@ExpectedDatabase(
 			value="classpath:/testData/cleanseOutput/",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED
 			)
