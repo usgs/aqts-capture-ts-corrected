@@ -1,0 +1,3 @@
+"json_data_id","start_time","end_time","approval_user","approval_comment","approval_level","level_description","date_applied_utc","partition_number"
+6,"0001-01-01 00:00:00","2016-08-23 19:00:00",admin,"","900",Working,"2017-02-02 23:33:02.499843",7
+6,"2016-08-23 19:00:00","2016-12-21 05:00:00",mjcolomb,Approval changed to Approved by mjcolomb.,"1200",Approved,"2017-05-17 19:52:02.88568",7
