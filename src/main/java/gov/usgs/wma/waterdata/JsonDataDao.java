@@ -103,9 +103,11 @@ public class JsonDataDao {
 		// also seem to correspond with stat_cd "00011" but the computation_identifier is probably fine for a first pass.
 		// We want to set the data type as "instantaneousTransform" so that the downstream state machine choice can
 		// point this packet of data at the proper transform lambda for instantaneous values.
-		if (INSTANTANEOUS.equalsIgnoreCase(timeSeries.getComputationIdentifier().trim())) {
-			timeSeries.setDataType(INSTANTANEOUS_TRANSFORM);
-		}
+
+		// TODO enable the below if-clause to allow ts-corrected to shred instantaneous values
+//		if (INSTANTANEOUS.equalsIgnoreCase(timeSeries.getComputationIdentifier().trim())) {
+//			timeSeries.setDataType(INSTANTANEOUS_TRANSFORM);
+//		}
 		return timeSeries;
 	}
 
