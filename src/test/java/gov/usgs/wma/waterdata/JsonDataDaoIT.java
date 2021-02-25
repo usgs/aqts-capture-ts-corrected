@@ -250,7 +250,7 @@ public class JsonDataDaoIT {
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
 	@DatabaseSetup("classpath:/testData/routing/")
 	@Test
-	public void getRoutingToProcessInstantaneousTestShouldInsertNothing() {
+	public void getRoutingToProcessInstantaneousTestShouldInsertNothingOnProduction() {
 		ReflectionTestUtils.setField(jsonDataDao, "deployStage", "PROD-EXTERNAL");
 		request.setId(JSON_DATA_ID_6);
 		TimeSeries timeSeries = jsonDataDao.getRouting(request);
