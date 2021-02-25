@@ -22,10 +22,6 @@ public class JsonDataDao {
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
-	// TODO this is part of the feature toggle to prevent instantaneous value processing on production
-	@Value("${deployStage}")
-	protected String deployStage;
-
 	@Value("classpath:sql/approvals.sql")
 	private Resource approvals;
 
@@ -107,7 +103,11 @@ public class JsonDataDao {
 		// We want to set the data type as "instantaneousTransform" so that the downstream state machine choice can
 		// point this packet of data at the proper transform lambda for instantaneous values.
 		// TODO this is part of the feature toggle to prevent instantaneous value processing on production
-		if (INSTANTANEOUS.equalsIgnoreCase(timeSeries.getComputationIdentifier().trim()) && "PROD-EXTERNAL" != deployStage) {
+		String deployStage = "";
+		if (System.getenv("DEPLOY_STAGE") != null) {
+			deployStage = System.getenv("DEPLOY_STAGE");
+		}
+		if (INSTANTANEOUS.equalsIgnoreCase(timeSeries.getComputationIdentifier().trim()) && !deployStage.equalsIgnoreCase("prod-external")) {
 			timeSeries.setDataType(INSTANTANEOUS_TRANSFORM);
 		}
 		return timeSeries;

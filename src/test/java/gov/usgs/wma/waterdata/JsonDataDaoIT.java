@@ -23,7 +23,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,8 +67,6 @@ public class JsonDataDaoIT {
 		request = new RequestObject();
 		request.setId(JsonDataDaoIT.JSON_DATA_ID_1);
 		request.setPartitionNumber(JsonDataDaoIT.PARTITION_NUMBER);
-		// TODO this is part of the feature toggle to prevent instantaneous value processing on production
-		ReflectionTestUtils.setField(jsonDataDao, "deployStage", "DEV");
 	}
 
 	@DatabaseSetup("classpath:/testData/cleanseOutput/")
@@ -244,21 +241,6 @@ public class JsonDataDaoIT {
 		assertNotNull(timeSeries);
 		assertEquals(TIME_SERIES_UNIQUE_ID_INSTANTANEOUS, timeSeries.getUniqueId());
 		assertEquals(PROCESS_DATA_TYPE_INSTANTANEOUS, timeSeries.getDataType());
-	}
-
-	// TODO this is part of the feature toggle to prevent instantaneous value processing on production
-	@DatabaseSetup("classpath:/testData/cleanseOutput/")
-	@DatabaseSetup("classpath:/testData/routing/")
-	@Test
-	public void getRoutingToProcessInstantaneousTestShouldInsertNothingOnProduction() {
-		ReflectionTestUtils.setField(jsonDataDao, "deployStage", "PROD-EXTERNAL");
-		request.setId(JSON_DATA_ID_6);
-		TimeSeries timeSeries = jsonDataDao.getRouting(request);
-		assertNotNull(timeSeries);
-		assertEquals(TIME_SERIES_UNIQUE_ID_INSTANTANEOUS, timeSeries.getUniqueId());
-
-		// the null dataType prevents further action to insert this data
-		assertNull(timeSeries.getDataType());
 	}
 
 	@Test
