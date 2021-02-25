@@ -12,5 +12,3 @@ logging:
   level:
     root: ${ROOT_LOG_LEVEL}
     com.zaxxer: OFF
-
-deployStage: ${DEPLOY_STAGE}
