@@ -22,9 +22,12 @@ public class JsonDataDao {
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
+	// TODO this is part of the feature toggle to prevent instantaneous value processing on production
+	@Value("${deployStage}")
+	protected String deployStage;
+
 	@Value("classpath:sql/approvals.sql")
 	private Resource approvals;
-
 
 	@Value("classpath:sql/gapTolerances.sql")
 	private Resource gapTolerances;
@@ -103,11 +106,10 @@ public class JsonDataDao {
 		// also seem to correspond with stat_cd "00011" but the computation_identifier is probably fine for a first pass.
 		// We want to set the data type as "instantaneousTransform" so that the downstream state machine choice can
 		// point this packet of data at the proper transform lambda for instantaneous values.
-
-		// TODO enable the below if-clause to allow ts-corrected to shred instantaneous values
-//		if (INSTANTANEOUS.equalsIgnoreCase(timeSeries.getComputationIdentifier().trim())) {
-//			timeSeries.setDataType(INSTANTANEOUS_TRANSFORM);
-//		}
+		// TODO this is part of the feature toggle to prevent instantaneous value processing on production
+		if (INSTANTANEOUS.equalsIgnoreCase(timeSeries.getComputationIdentifier().trim()) && "PROD-EXTERNAL" != deployStage) {
+			timeSeries.setDataType(INSTANTANEOUS_TRANSFORM);
+		}
 		return timeSeries;
 	}
 
