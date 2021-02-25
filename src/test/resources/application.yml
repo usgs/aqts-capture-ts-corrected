@@ -10,3 +10,5 @@ logging:
   level:
     org.postgresql: DEBUG
     com.zaxxer: OFF
+
+deployStage: ${DEPLOY_STAGE}
